@@ -10,6 +10,7 @@ namespace NeuralNetwork
     {
         public Neuron FromNeuron { get; set; }
         public Neuron ToNeuron { get; set; }
+        public double WeightUpdateBefore { get; set; }
         public double Weight { get; set; }
         public string MetaInformation { get; set; }
     }

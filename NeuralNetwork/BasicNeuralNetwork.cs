@@ -150,7 +150,7 @@ namespace NeuralNetwork
 
         }
 
-        private void UpdateWeights(double lr)
+        private void UpdateWeights(double lr, double momentum = 0.9)
         {
             foreach (Layer layer in Layers.OrderByDescending(x => x.Metainformation))
             {
@@ -160,11 +160,15 @@ namespace NeuralNetwork
                     {
                         if (c.FromNeuron.IsBias)
                         {
-                            c.Weight = c.Weight + (lr * c.ToNeuron.Delta * c.ToNeuron.Layer.Activation.Derivative(c.ToNeuron.Net)); // *1
+                            double weightUpdate = (lr * c.ToNeuron.Delta * c.ToNeuron.Layer.Activation.Derivative(c.ToNeuron.Net)) + (c.WeightUpdateBefore * momentum);
+                            c.Weight = c.Weight + weightUpdate;
+                            c.WeightUpdateBefore = weightUpdate;
                         }
                         else
                         {
-                            c.Weight = c.Weight + (lr * c.ToNeuron.Delta * c.ToNeuron.Layer.Activation.Derivative(c.ToNeuron.Net) * c.FromNeuron.Out);
+                            double weightUpdate = (lr * c.ToNeuron.Delta * c.ToNeuron.Layer.Activation.Derivative(c.ToNeuron.Net) * c.FromNeuron.Out) + (c.WeightUpdateBefore * momentum);
+                            c.Weight = c.Weight + weightUpdate;
+                            c.WeightUpdateBefore = weightUpdate;
                         }
 
                     }
